@@ -1,0 +1,242 @@
+; results
+ly:	.db	0
+hy:	.db	0
+
+; main
+main:
+	mov	a, rtp00
+	sta	rdkeyip
+	jmp	rdkey
+rtp00:	lda	key
+	sta	d01
+	mov	a, rtp01
+	sta	rdkeyip
+	jmp	rdkey
+rtp01:	lda	key
+	sta	d00
+	mov	a, rtp02
+	sta	rdkeyip
+	jmp	rdkey
+rtp02:	lda	key
+	sta	d11
+	mov	a, rtp03
+	sta	rdkeyip
+	jmp	rdkey
+rtp03:	lda	key
+	sta	d10
+
+
+	lda	d00
+	sta	x0
+	lda	d10
+	sta	x1
+	mov	a, rtp10
+	sta	dmdip
+	jmp	dmd
+rtp10:	lda	y
+	sta	y0
+
+	lda	d00
+	sta	x0
+	lda	d11
+	sta	x1
+	mov	a, rtp11
+	sta	dmdip
+	jmp	dmd
+rtp11:	lda	y
+	sta	y1
+
+	lda	d01
+	sta	x0
+	lda	d10
+	sta	x1
+	mov	a, rtp12
+	sta	dmdip
+	jmp	dmd
+rtp12:	lda	y
+	mov	r0, a
+	lda	y1
+	add	a, r0
+	sta	y1
+
+	lda	d01
+	sta	x0
+	lda	d11
+	sta	x1
+	mov	a, rtp13
+	sta	dmdip
+	jmp	dmd
+rtp13:	lda	y
+	sta	y2
+
+
+	lda	y0
+	sta	rem
+	mov	a, rtp20
+	sta	nlrip
+	jmp	nlr
+rtp20:	lda	rem
+	sta	y0
+	lda	qut
+	mov	r0, a
+	lda	y1
+	add	a, r0
+
+	sta	rem
+	mov	a, rtp21
+	sta	nlrip
+	jmp	nlr
+rtp21:	lda	rem
+	sta	y1
+	lda	qut
+	mov	r0, a
+	lda	y2
+	add	a, r0
+
+	sta	rem
+	mov	a, rtp22
+	sta	nlrip
+	jmp	nlr
+rtp22:	lda	rem
+	sta	y2
+	lda	qut
+	sta	y3
+
+
+	lda	y0
+	sta	d0
+	lda	y1
+	sta	d1
+	mov	a, rtp30
+	sta	cmbip
+	jmp	cmb
+rtp30:	lda	yy
+	sta	ly
+
+	lda	y2
+	sta	d0
+	lda	y3
+	sta	d1
+	mov	a, rtp31
+	sta	cmbip
+	jmp	cmb
+rtp31:	lda	yy
+	sta	hy
+	halt
+
+; variables of main
+d00:	.db	0
+d01:	.db	0
+d10:	.db	0
+d11:	.db	0
+
+y0:	.db	0
+y1:	.db	0
+y2:	.db	0
+y3:	.db	0
+
+
+; digit multiply digit
+x0:	.db	0	; i
+x1:	.db	0	; i
+y:	.db	0	; o
+
+dmd:	mov	a, 0
+	sta	y
+next0:	lda	x0
+	jz	done0
+	mov	r0, a
+	dec	a, r0
+	sta	x0
+	lda	x1
+	mov	r0, a
+	lda	y
+	add	a, r0
+	sta	y
+	jmp	next0
+done0:	jmp	(000)
+dmdip:	.db	0
+
+; normalize result of dmd
+rem:	.db	0	; i, o
+qut:	.db	0	; o
+
+nlr:	mov	a, 0
+	sta	qut
+	mov	r3, 10
+	mov	r2, 1
+next1:	lda	rem
+	sub	a, r3
+	jc	again1
+	jmp	(000)
+nlrip:	.db	0
+again1:	sta	rem
+	lda	qut
+	add	a, r2
+	sta	qut
+	jmp	next1
+
+; shift right
+shrx:	.db	0	; i, o
+
+shr:	mov	a, 0x7f
+	mov	r3, a
+	lda	shrx
+	mov	r0, a
+	rrc	a, r0
+	jc	seth2
+	and	a, r3
+	jmp	done2
+seth2:	sta	shrx
+	mov	a, 0x80
+	mov	r2, a
+	lda	shrx
+	and	a, r3
+	add	a, r2
+done2:	sta	shrx
+	jmp	(001)
+shrip:	.db	0
+
+
+; combine 2 digits
+d0:	.db	0	; i
+d1:	.db	0	; i
+yy:	.db	0	; o
+
+cnt3:	.db	0	; local
+
+cmb:	lda	d1
+	sta	shrx
+	mov	a, 4
+	sta	cnt3
+	mov	a, crtp3
+	sta	shrip
+again3:	jmp	shr
+crtp3:	lda	cnt3
+	mov	r0, a
+	dec	a, r0
+	sta	cnt3
+	jz	next3
+	jmp	again3
+	
+next3:	mov	a, 0xf0
+	mov	r0, a
+	lda	d0
+	mov	r1, a
+	lda	shrx
+	and	a, r0
+	add	a, r1
+	sta	yy
+	jmp	(000)
+cmbip:	.db	0
+
+
+; read a key
+key:	.db	0	; o
+rdkey:	lda	0x404
+	ja0	rdkey
+	lda	0x401
+	sta	key
+	jmp	(000)
+rdkeyip:
+	.db	0

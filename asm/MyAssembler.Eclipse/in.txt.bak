@@ -1,0 +1,174 @@
+; variables of main
+y0:	.db	0
+y1:	.db	0
+
+d01:	.db	0
+d11:	.db	0
+
+; main
+main:
+	mov	a, rtp0a
+	sta	rdkeyip
+	jmp	rdkey
+rtp0a:	mov	a, r3
+	sta	d01
+	mov	a, rtp1a
+	sta	rdkeyip
+	jmp	rdkey
+rtp1a:	lda	d01
+	mov	r2, a
+	mov	a, rtp0b
+	sta	tohexip
+	jmp	tohex
+rtp0b:	mov	a, r3
+	sta	y0
+
+	mov	a, rtp2a
+	sta	rdkeyip
+	jmp	rdkey
+rtp2a:	mov	a, r3
+	sta	d11
+	mov	a, rtp3a
+	sta	rdkeyip
+	jmp	rdkey
+rtp3a:	lda	d11
+	mov	r2, a
+	mov	a, rtp1b
+	sta	tohexip
+	jmp	tohex
+rtp1b:	mov	a, r3
+	sta	y1
+
+	mov	r3, 0
+	mov	r2, 0
+	lda	y1
+	mov	r1, a
+	lda	y0
+	mov	r0, a
+nexta:	mov	a, r0
+	dec	a
+	jz	donea
+	mov	r0, a
+	mov	a, r3
+	add	a, r1
+	mov	r3, a
+	jc	carrya
+	jmp	nexta
+carrya:	mov	a, r2
+	inc	a
+	mov	r2, a
+	jmp	nexta
+
+donea:	mov	a, rtp0c
+	sta	divhrdip
+	jmp	divhrd
+rtp0c:	mov	a, r2
+	sta	y1
+	mov	a, rtp1c
+	sta	todecip
+	jmp	todec
+rtp1c:	mov	a, r3
+	sta	y0
+	lda	y1
+	mov	r3, a
+	mov	a, rtp2c
+	sta	todecip
+	jmp	todec
+rtp2c:	mov	a, r3
+	sta	y1
+	halt
+
+
+; divide 2-byte hex by 100
+; params:
+; d0	r3	; i
+; d1	r2	; i
+; rem	r3	; o
+; qut	r2	; o
+
+; local variables:
+qutb:	.db	0	; l
+ab:	.db	0	; l
+
+divhrd:	mov	r1, 0
+	mov	r0, 100
+	mov	a, 0
+	sta	qutb
+nextb:	mov	a, r3
+	sub	a, r0
+	jc	rsm1b
+	sta	ab
+	mov	a, r2
+	dec	a
+	jc	rsm0b
+	lda	qutb
+	mov	r2, a
+	jmp	(000)
+divhrdip:
+	.db	0
+
+rsm0b:	mov	r2, a
+	lda	ab
+rsm1b:	mov	r3, a
+	lda	qutb
+	inc	a
+	sta	qutb
+	jmp	nextb
+
+
+; convert 1 hex value to 2 bcd digit
+; params:
+; val	r3	; i, o
+
+todec:	mov	r2, 0
+	mov	r1, 10
+nextc:	mov	a, r3
+	sub	a, r1
+	jc	againc
+	mov	a, r2
+	rrc	a
+	rrc	a
+	rrc	a
+	rrc	a
+	rrc	a
+	add	a, r3
+	mov	a, r3
+	jmp	(000)
+todecip:
+	.db	0
+againc:	mov	r3, a
+	mov	a, r2
+	inc	a
+	mov	r2, a
+	jmp	nextc
+
+
+; convert 2 bcd digit to 1 hex value
+; prarms:
+; d0	r3	; i, o
+; d1	r2	; i
+
+tohex:	mov	r0, 10
+nextd:	mov	a, r3
+	add	a, r2
+	mov	r3, a
+	mov	a, r0
+	dec	a
+	jz	doned
+	mov	r0, a
+	jmp	nextd
+doned:	jmp	(000)
+tohexip:
+	.db	0
+
+
+; read a key
+; params:
+; key	r3	; o
+rdkey:	lda	0x404
+	ja0	rdkey
+	lda	0x401
+	mov	r3, a
+	jmp	(000)
+rdkeyip:
+	.db	0

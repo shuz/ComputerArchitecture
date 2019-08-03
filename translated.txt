@@ -1,0 +1,349 @@
+000	00	; ly:	.db	0
+001	00	; hy:	.db	0
+002	44	; 	mov	a, rtp00
+003	08	; 
+004	a1	; 	sta	rdkeyip
+005	5c	; 
+006	f9	; 	jmp	rdkey
+007	53	; 
+008	81	; rtp00:	lda	key
+009	52	; 
+00a	a0	; 	sta	d01
+00b	d2	; 
+00c	44	; 	mov	a, rtp01
+00d	12	; 
+00e	a1	; 	sta	rdkeyip
+00f	5c	; 
+010	f9	; 	jmp	rdkey
+011	53	; 
+012	81	; rtp01:	lda	key
+013	52	; 
+014	a0	; 	sta	d00
+015	d1	; 
+016	44	; 	mov	a, rtp02
+017	1c	; 
+018	a1	; 	sta	rdkeyip
+019	5c	; 
+01a	f9	; 	jmp	rdkey
+01b	53	; 
+01c	81	; rtp02:	lda	key
+01d	52	; 
+01e	a0	; 	sta	d11
+01f	d4	; 
+020	44	; 	mov	a, rtp03
+021	26	; 
+022	a1	; 	sta	rdkeyip
+023	5c	; 
+024	f9	; 	jmp	rdkey
+025	53	; 
+026	81	; rtp03:	lda	key
+027	52	; 
+028	a0	; 	sta	d10
+029	d3	; 
+02a	80	; 	lda	d00
+02b	d1	; 
+02c	a0	; 	sta	x0
+02d	d9	; 
+02e	80	; 	lda	d10
+02f	d3	; 
+030	a0	; 	sta	x1
+031	da	; 
+032	44	; 	mov	a, rtp10
+033	38	; 
+034	a0	; 	sta	dmdip
+035	f3	; 
+036	f8	; 	jmp	dmd
+037	dc	; 
+038	80	; rtp10:	lda	y
+039	db	; 
+03a	a0	; 	sta	y0
+03b	d5	; 
+03c	80	; 	lda	d00
+03d	d1	; 
+03e	a0	; 	sta	x0
+03f	d9	; 
+040	80	; 	lda	d11
+041	d4	; 
+042	a0	; 	sta	x1
+043	da	; 
+044	44	; 	mov	a, rtp11
+045	4a	; 
+046	a0	; 	sta	dmdip
+047	f3	; 
+048	f8	; 	jmp	dmd
+049	dc	; 
+04a	80	; rtp11:	lda	y
+04b	db	; 
+04c	a0	; 	sta	y1
+04d	d6	; 
+04e	80	; 	lda	d01
+04f	d2	; 
+050	a0	; 	sta	x0
+051	d9	; 
+052	80	; 	lda	d10
+053	d3	; 
+054	a0	; 	sta	x1
+055	da	; 
+056	44	; 	mov	a, rtp12
+057	5c	; 
+058	a0	; 	sta	dmdip
+059	f3	; 
+05a	f8	; 	jmp	dmd
+05b	dc	; 
+05c	80	; rtp12:	lda	y
+05d	db	; 
+05e	40	; 	mov	r0, a
+05f	80	; 	lda	y1
+060	d6	; 
+061	00	; 	add	a, r0
+062	a0	; 	sta	y1
+063	d6	; 
+064	80	; 	lda	d01
+065	d2	; 
+066	a0	; 	sta	x0
+067	d9	; 
+068	80	; 	lda	d11
+069	d4	; 
+06a	a0	; 	sta	x1
+06b	da	; 
+06c	44	; 	mov	a, rtp13
+06d	72	; 
+06e	a0	; 	sta	dmdip
+06f	f3	; 
+070	f8	; 	jmp	dmd
+071	dc	; 
+072	80	; rtp13:	lda	y
+073	db	; 
+074	a0	; 	sta	y2
+075	d7	; 
+076	80	; 	lda	y0
+077	d5	; 
+078	a0	; 	sta	rem
+079	f4	; 
+07a	44	; 	mov	a, rtp20
+07b	80	; 
+07c	a1	; 	sta	nlrip
+07d	04	; 
+07e	f8	; 	jmp	nlr
+07f	f6	; 
+080	80	; rtp20:	lda	rem
+081	f4	; 
+082	a0	; 	sta	y0
+083	d5	; 
+084	80	; 	lda	qut
+085	f5	; 
+086	40	; 	mov	r0, a
+087	80	; 	lda	y1
+088	d6	; 
+089	00	; 	add	a, r0
+08a	a0	; 	sta	rem
+08b	f4	; 
+08c	44	; 	mov	a, rtp21
+08d	92	; 
+08e	a1	; 	sta	nlrip
+08f	04	; 
+090	f8	; 	jmp	nlr
+091	f6	; 
+092	80	; rtp21:	lda	rem
+093	f4	; 
+094	a0	; 	sta	y1
+095	d6	; 
+096	80	; 	lda	qut
+097	f5	; 
+098	40	; 	mov	r0, a
+099	80	; 	lda	y2
+09a	d7	; 
+09b	00	; 	add	a, r0
+09c	a0	; 	sta	rem
+09d	f4	; 
+09e	44	; 	mov	a, rtp22
+09f	a4	; 
+0a0	a1	; 	sta	nlrip
+0a1	04	; 
+0a2	f8	; 	jmp	nlr
+0a3	f6	; 
+0a4	80	; rtp22:	lda	rem
+0a5	f4	; 
+0a6	a0	; 	sta	y2
+0a7	d7	; 
+0a8	80	; 	lda	qut
+0a9	f5	; 
+0aa	a0	; 	sta	y3
+0ab	d8	; 
+0ac	80	; 	lda	y0
+0ad	d5	; 
+0ae	a1	; 	sta	d0
+0af	28	; 
+0b0	80	; 	lda	y1
+0b1	d6	; 
+0b2	a1	; 	sta	d1
+0b3	29	; 
+0b4	44	; 	mov	a, rtp30
+0b5	ba	; 
+0b6	a1	; 	sta	cmbip
+0b7	51	; 
+0b8	f9	; 	jmp	cmb
+0b9	2c	; 
+0ba	81	; rtp30:	lda	yy
+0bb	2a	; 
+0bc	a0	; 	sta	ly
+0bd	00	; 
+0be	80	; 	lda	y2
+0bf	d7	; 
+0c0	a1	; 	sta	d0
+0c1	28	; 
+0c2	80	; 	lda	y3
+0c3	d8	; 
+0c4	a1	; 	sta	d1
+0c5	29	; 
+0c6	44	; 	mov	a, rtp31
+0c7	cc	; 
+0c8	a1	; 	sta	cmbip
+0c9	51	; 
+0ca	f9	; 	jmp	cmb
+0cb	2c	; 
+0cc	81	; rtp31:	lda	yy
+0cd	2a	; 
+0ce	a0	; 	sta	hy
+0cf	01	; 
+0d0	ff	; 	halt
+0d1	00	; d00:	.db	0
+0d2	00	; d01:	.db	0
+0d3	00	; d10:	.db	0
+0d4	00	; d11:	.db	0
+0d5	00	; y0:	.db	0
+0d6	00	; y1:	.db	0
+0d7	00	; y2:	.db	0
+0d8	00	; y3:	.db	0
+0d9	00	; x0:	.db	0
+0da	00	; x1:	.db	0
+0db	00	; y:	.db	0
+0dc	44	; dmd:	mov	a, 0
+0dd	00	; 
+0de	a0	; 	sta	y
+0df	db	; 
+0e0	80	; next0:	lda	x0
+0e1	d9	; 
+0e2	e0	; 	jz	done0
+0e3	f2	; 
+0e4	40	; 	mov	r0, a
+0e5	64	; 	dec	a, r0
+0e6	a0	; 	sta	x0
+0e7	d9	; 
+0e8	80	; 	lda	x1
+0e9	da	; 
+0ea	40	; 	mov	r0, a
+0eb	80	; 	lda	y
+0ec	db	; 
+0ed	00	; 	add	a, r0
+0ee	a0	; 	sta	y
+0ef	db	; 
+0f0	f8	; 	jmp	next0
+0f1	e0	; 
+0f2	f8	; done0:	jmp	(000)
+0f3	00	; dmdip:	.db	0
+0f4	00	; rem:	.db	0
+0f5	00	; qut:	.db	0
+0f6	44	; nlr:	mov	a, 0
+0f7	00	; 
+0f8	a0	; 	sta	qut
+0f9	f5	; 
+0fa	63	; 	mov	r3, 10
+0fb	0a	; 
+0fc	62	; 	mov	r2, 1
+0fd	01	; 
+0fe	80	; next1:	lda	rem
+0ff	f4	; 
+100	07	; 	sub	a, r3
+101	e9	; 	jc	again1
+102	05	; 
+103	f8	; 	jmp	(000)
+104	00	; nlrip:	.db	0
+105	a0	; again1:	sta	rem
+106	f4	; 
+107	80	; 	lda	qut
+108	f5	; 
+109	02	; 	add	a, r2
+10a	a0	; 	sta	qut
+10b	f5	; 
+10c	f8	; 	jmp	next1
+10d	fe	; 
+10e	00	; shrx:	.db	0
+10f	44	; shr:	mov	a, 0x7f
+110	7f	; 
+111	43	; 	mov	r3, a
+112	81	; 	lda	shrx
+113	0e	; 
+114	40	; 	mov	r0, a
+115	c0	; 	rrc	a, r0
+116	e9	; 	jc	seth2
+117	1b	; 
+118	27	; 	and	a, r3
+119	f9	; 	jmp	done2
+11a	24	; 
+11b	a1	; seth2:	sta	shrx
+11c	0e	; 
+11d	44	; 	mov	a, 0x80
+11e	80	; 
+11f	42	; 	mov	r2, a
+120	81	; 	lda	shrx
+121	0e	; 
+122	27	; 	and	a, r3
+123	02	; 	add	a, r2
+124	a1	; done2:	sta	shrx
+125	0e	; 
+126	f9	; 	jmp	(001)
+127	00	; shrip:	.db	0
+128	00	; d0:	.db	0
+129	00	; d1:	.db	0
+12a	00	; yy:	.db	0
+12b	00	; cnt3:	.db	0
+12c	81	; cmb:	lda	d1
+12d	29	; 
+12e	a1	; 	sta	shrx
+12f	0e	; 
+130	44	; 	mov	a, 4
+131	04	; 
+132	a1	; 	sta	cnt3
+133	2b	; 
+134	44	; 	mov	a, crtp3
+135	3a	; 
+136	a1	; 	sta	shrip
+137	27	; 
+138	f9	; again3:	jmp	shr
+139	0f	; 
+13a	81	; crtp3:	lda	cnt3
+13b	2b	; 
+13c	40	; 	mov	r0, a
+13d	64	; 	dec	a, r0
+13e	a1	; 	sta	cnt3
+13f	2b	; 
+140	e1	; 	jz	next3
+141	44	; 
+142	f9	; 	jmp	again3
+143	38	; 
+144	44	; next3:	mov	a, 0xf0
+145	f0	; 
+146	40	; 	mov	r0, a
+147	81	; 	lda	d0
+148	28	; 
+149	41	; 	mov	r1, a
+14a	81	; 	lda	shrx
+14b	0e	; 
+14c	24	; 	and	a, r0
+14d	01	; 	add	a, r1
+14e	a1	; 	sta	yy
+14f	2a	; 
+150	f8	; 	jmp	(000)
+151	00	; cmbip:	.db	0
+152	00	; key:	.db	0
+153	84	; rdkey:	lda	0x404
+154	04	; 
+155	f1	; 	ja0	rdkey
+156	53	; 
+157	84	; 	lda	0x401
+158	01	; 
+159	a1	; 	sta	key
+15a	52	; 
+15b	f8	; 	jmp	(000)
+15c	00	; 	.db	0

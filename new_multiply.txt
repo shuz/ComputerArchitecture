@@ -1,0 +1,200 @@
+; results
+ly:	.db	0
+hy:	.db	0
+
+; main
+main:
+	mov	a, rtp00
+	sta	rdkeyip
+	jmp	rdkey
+rtp00:	mov	a, r3
+	sta	d01
+	mov	a, rtp01
+	sta	rdkeyip
+	jmp	rdkey
+rtp01:	mov	a, r3
+	sta	d00
+	mov	a, rtp02
+	sta	rdkeyip
+	jmp	rdkey
+rtp02:	mov	a, r3
+	sta	d11
+	mov	a, rtp03
+	sta	rdkeyip
+	jmp	rdkey
+rtp03:	mov	a, r3
+	sta	d10
+
+
+	lda	d00
+	mov	r3, a
+	lda	d10
+	mov	r2, a
+	mov	a, rtp10
+	sta	dmdip
+	jmp	dmd
+rtp10:	mov	a, r1
+	sta	y0
+
+	lda	d00
+	mov	r3, a
+	lda	d11
+	mov	r2, a
+	mov	a, rtp11
+	sta	dmdip
+	jmp	dmd
+rtp11:	mov	a, r1
+	sta	y1
+
+	lda	d01
+	mov	r3, a
+	lda	d10
+	mov	r2, a
+	mov	a, rtp12
+	sta	dmdip
+	jmp	dmd
+rtp12:	mov	a, r1
+	mov	r0, a
+	lda	y1
+	add	a, r0
+	sta	y1
+
+	lda	d01
+	mov	r3, a
+	lda	d11
+	mov	r2, a
+	mov	a, rtp13
+	sta	dmdip
+	jmp	dmd
+rtp13:	mov	a, r1
+	sta	y2
+
+
+	lda	y0
+	mov	r3, a
+	mov	a, rtp20
+	sta	nlrip
+	jmp	nlr
+rtp20:	mov	a, r3
+	sta	y0
+	lda	y1
+	add	a, r2
+
+	mov	r3, a
+	mov	a, rtp21
+	sta	nlrip
+	jmp	nlr
+rtp21:	mov	a, r3
+	sta	y1
+	lda	y2
+	add	a, r2
+
+	mov	r3, a
+	mov	a, rtp22
+	sta	nlrip
+	jmp	nlr
+rtp22:	mov	a, r3
+	sta	y2
+	mov	a, r2
+	sta	y3
+
+
+	lda	y0
+	mov	r3, a
+	lda	y1
+	mov	r2, a
+	mov	a, rtp30
+	sta	cmbip
+	jmp	cmb
+rtp30:	mov	a, r3
+	sta	ly
+
+	lda	y2
+	mov	r3, a
+	lda	y3
+	mov	r2, a
+	mov	a, rtp31
+	sta	cmbip
+	jmp	cmb
+rtp31:	mov	a, r3
+	sta	hy
+	halt
+
+; variables of main
+d00:	.db	0
+d01:	.db	0
+d10:	.db	0
+d11:	.db	0
+
+y0:	.db	0
+y1:	.db	0
+y2:	.db	0
+y3:	.db	0
+
+
+; digit multiply digit
+; params:
+; x0	r3	; i
+; x1	r2	; i
+; y	r1	; o
+
+dmd:	mov	r1, 0
+next0:	mov	a, r3
+	jz	done0
+	dec	a
+	mov	r3, a
+	mov	a, r1
+	add	a, r2
+	mov	r1, a
+	jmp	next0
+done0:	jmp	(000)
+dmdip:	.db	0
+
+; normalize result of dmd
+; params:
+; rem	r3	; i, o
+; qut	r2	; o
+
+nlr:	mov	r2, 0
+	mov	r1, 10
+	mov	r0, 1
+next1:	mov	a, r3
+	sub	a, r1
+	jc	again1
+	jmp	(000)
+nlrip:	.db	0
+again1:	mov	r3, a
+	mov	a, r2
+	add	a, r0
+	mov	r2, a
+	jmp	next1
+
+; combine 2 digits
+; prarms:
+; d0	r3	; i, o
+; d1	r2	; i
+
+cmb:	mov	r0, 0xf0
+	mov	a, r2
+	rrc	a
+	rrc	a
+	rrc	a
+	rrc	a
+	rrc	a
+	and	a, r0
+	add	a, r3
+	mov	a, r3
+	jmp	(000)
+cmbip:	.db	0
+
+
+; read a key
+; params:
+; key	r3	; o
+rdkey:	lda	0x404
+	ja0	rdkey
+	lda	0x401
+	mov	r3, a
+	jmp	(000)
+rdkeyip:
+	.db	0
